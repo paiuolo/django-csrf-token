@@ -1,0 +1,67 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="js-cookie.html">
+
+
+<dom-module id="django-csrf-token">
+    <template>
+        <style>
+        :host{
+            display: none;
+        }
+        :host[visible] {
+            display: block;
+        }
+        </style>
+        
+        <template is="dom-if" if="[[visible]]">
+            <h2>[[token]]</h2>
+        </template>
+    </template>
+
+    <script>
+    /**
+     * `django-csrf-token`
+     * Polymer django CSRF token utilities
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class DjangoCsrfToken extends Polymer.Element {
+        static get is() { return 'django-csrf-token'; }
+        static get properties() {
+            return {
+                token:{
+                    type: String,
+                    value: '',
+                    notify: true,
+                    reflectToAttribute: true,
+                },
+                visible: {
+                    type: Boolean,
+                    value: false
+                },
+                headers:{
+                    type: Object,
+                    computed: '_toHeader(token)',
+                    notify: true
+                }
+            };
+        }
+        
+        ready(){
+            super.ready();
+            this.set('token', Cookies.get('csrftoken'));
+            console.log('django-csrf-token', this.visible, this.token, this.headers);
+        }
+        
+        _toHeader(token){
+            return {
+                "X-CSRFToken": token,
+            };
+        }
+    }
+
+    window.customElements.define(DjangoCsrfToken.is, DjangoCsrfToken);
+    </script>
+</dom-module>
