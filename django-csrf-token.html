@@ -52,7 +52,7 @@
         ready(){
             super.ready();
             this.set('token', Cookies.get('csrftoken'));
-            console.log('django-csrf-token', this.visible, this.token, this.headers);
+            //console.log('django-csrf-token', this.visible, this.token, this.headers);
         }
         
         _toHeader(token){
